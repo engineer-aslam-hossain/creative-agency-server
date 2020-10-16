@@ -125,12 +125,6 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       console.log(result.insertedCount);
     });
   });
-
-  // app.get("/getSingleReview", (req, res) => {
-  //   reviewsCollection.find({}).toArray((err, documents) => {
-  //     res.send(documents);
-  //   });
-  // });
 });
 
 MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
@@ -140,11 +134,13 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
 
   app.post("/addNewOrder", (req, res) => {
     const file = req.files.file;
+    const img = req.body.img;
     const name = req.body.name;
     const email = req.body.email;
     const price = req.body.price;
     const company_name = req.body.company_name;
     const details = req.body.details;
+    const status = req.body.status;
     const newImg = file.data;
     const encImg = newImg.toString("base64");
 
@@ -155,7 +151,16 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
     };
 
     ordersCollection
-      .insertOne({ name, email, image, price, company_name, details })
+      .insertOne({
+        name,
+        email,
+        image,
+        price,
+        company_name,
+        details,
+        status,
+        img,
+      })
       .then(result => {
         res.send(result.insertedCount > 0);
         console.log(result.insertedCount);
@@ -173,6 +178,22 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       .find({ email: req.query.email })
       .toArray((err, documents) => {
         res.send(documents);
+      });
+  });
+
+  app.patch("/updateStatus/:id", (req, res) => {
+    // console.log(req.body.status);
+    // console.log(req.params.id);
+    ordersCollection
+      .updateOne(
+        { _id: ObjectId(req.params.id) },
+        {
+          $set: { status: req.body.status },
+        }
+      )
+      .then(result => {
+        res.send(result);
+        // console.log(result);
       });
   });
 });
@@ -202,7 +223,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
 ////////// connecting with mongo  end //////////////
 
 app.get("/", (req, res) => {
-  res.send("Hello world");
+  res.send("<h1>Hello From the Creative Agency Server</h1>");
 });
 
 app.listen(process.env.PORT || 8080, () =>
