@@ -36,33 +36,9 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       res.send(documents);
     });
   });
-});
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
   const servicesCollection = client
     .db(process.env.DB_NAME)
     .collection(process.env.DB_COLLECTION3);
-
-  app.post("/addNewService", (req, res) => {
-    const file = req.files.file;
-    const name = req.body.name;
-    const price = req.body.price;
-    const details = req.body.details;
-    const newImg = file.data;
-    const encImg = newImg.toString("base64");
-
-    var image = {
-      contentType: file.mimetype,
-      size: file.size,
-      img: Buffer.from(encImg, "base64"),
-    };
-
-    servicesCollection
-      .insertOne({ name, image, price, details })
-      .then(result => {
-        res.send(result.insertedCount > 0);
-        console.log(result.insertedCount);
-      });
-  });
 
   app.post("/addServices", (req, res) => {
     const field = req.body;
@@ -77,9 +53,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       res.send(documents);
     });
   });
-});
 
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
   const slidersCollection = client
     .db(process.env.DB_NAME)
     .collection(process.env.DB_COLLECTION4);
@@ -97,9 +71,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       res.send(documents);
     });
   });
-});
 
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
   const reviewsCollection = client
     .db(process.env.DB_NAME)
     .collection(process.env.DB_COLLECTION5);
@@ -125,9 +97,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
       console.log(result.insertedCount);
     });
   });
-});
 
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
   const ordersCollection = client
     .db(process.env.DB_NAME)
     .collection(process.env.DB_COLLECTION1);
@@ -196,9 +166,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
         // console.log(result);
       });
   });
-});
 
-MongoClient.connect(uri, { useUnifiedTopology: true }, function (err, client) {
   const adminCollection = client
     .db(process.env.DB_NAME)
     .collection(process.env.DB_COLLECTION6);
